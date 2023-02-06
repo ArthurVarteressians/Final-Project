@@ -1,0 +1,34 @@
+On the website we have 3 roles: 
+1- Patients
+2- Doctors
+3- Manager
+
+
+Manager:
+1- Login form.
+2- There will be an input form. He should have access to all patients' data, he can Add, Update, or even Delete patients.
+3- He will see the patient's name with ******* for privacy matters.
+4- He will also check the patient's status.
+
+
+Doctors:
+1- Login form.
+2- Every doctor, should see his patients and check all patients list.
+3- There will be a section where, the doctor will input his working time and also free times for checkup patients, and patients can book the time.
+4- There should be 4 or 5 statuses for the patient's condition. Waiting list, checked up, in progress, and cured. 
+
+
+Patients:
+1- Sign up / Log in
+2- They will answer some fixed and basic questions and after that, they will redirect to the correct doctor.
+3- After that, they will see the doctor's information and Bio and scheduling system. 
+4(?)- They can also submit call requests, or even ask any questions from doctors. 
+
+
+Whole site:
+1- There will be different pages, Home - About Us- Services - Doctors.
+
+
+Notes:
+1- The password field will be created with the Regex algorithm.
+2- Store password in DB with hashing system.

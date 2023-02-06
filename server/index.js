@@ -1,11 +1,11 @@
 const express = require("express");
 const app = express();
+const util = require("util");
 const mysql = require("mysql2");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
-// import { ToastContainer, toast } from "react-toastify";
 
-
+const saltRounds = 10;
 
 app.use(cors());
 app.use(express.json());
@@ -17,36 +17,36 @@ const db = mysql.createConnection({
   database: "employeesystem",
 });
 
+const query = util.promisify(db.query).bind(db);
 
-  app.post("/create", (req, res) => {
-    const name = req.body.name;
-    const email = req.body.email;
-    const password = req.body.password;
-    const confirmPassword = req.body.confirmPassword;
-    // if (password !== confirmPassword) {
-    //   toast.error("The password is not same!");
-    // } else 
-    //============Hashing part==================
-    //   const newPass = req.body.password;
-    //   let hashedPass = newPass.toString();
-    //   const salt = bcrypt.genSalt(20);
-    //   newPass = bcrypt.hash(newPass, salt);
-    //   password = hashedPass;
-    // console.log(typeof(hashedPass));
-    //==========================================
+app.post("/create", (req, res) => {
+  const name = req.body.name;
+  const email = req.body.email;
+  const password = req.body.password;
+  const confirmPassword = req.body.confirmPassword;
 
-    db.query(
-      "INSERT INTO employees(name, email,password) VALUES (?,?,?)",
-      [name, email, password],
-      (err, result) => {
-        if (err) {
-          console.log(err);
-        } else {
-          res.send("Values Inserted");
-        }
-      }
-    );
-  });
+  if (password === confirmPassword) {
+    (async () => {
+      try {
+        const hash = await bcrypt.hash(req.body.password, saltRounds);
+
+        await query(
+          "INSERT INTO employees(name, email,password) VALUES (?,?,?)",
+          [name, email, hash],
+          (err, result) => {
+            if (err) {
+              console.log(err);
+            } else {
+              res.send("Values Inserted");
+            }
+          }
+        );
+      } catch {}
+    })();
+  } else {
+    console.error("Error");
+  }
+});
 
 app.listen(3001, () => {
   console.log("on port 3001 server is up");
